@@ -1,0 +1,81 @@
+:root {
+  --themeone: #ffffff;
+  --themetwo: #7c5f76;
+}
+
+.theme {
+  color: var(--themeone);
+  background-color: var(--themetwo);
+}
+
+header {
+  padding: 10px;
+  margin: 2px;
+}
+
+h1 {
+  font-size: 70px;
+  font-family: 'Chivo', sans-serif;
+}
+
+hr {
+  margin: 2px;
+}
+
+aside hr {
+  color: var(--themetwo);
+  margin-bottom: 20px;
+}
+
+aside {
+  background-color: var(--themeone);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.search-button {
+  width: 100%;
+  margin: 0;
+  background-color: var(--themetwo);
+  border-color: var(--themetwo);
+}
+
+main {
+  background-color: var(--themeone);
+  color: var(--themetwo);
+  border-radius: 10px;
+}
+
+main ul {
+  padding: 0;
+  list-style: none;
+}
+
+#search-history {
+  color: var(--themeone);
+  background-color: var(--themetwo);
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  border-radius: 10px;
+}
+
+h2 {
+  margin-top: 10px;
+}
+
+.right-bar {
+  margin-left: 5%;
+}
+
+.days {
+  background-color: var(--themeone);
+  color: var(--themetwo);
+  margin-top: 5%;
+  border-radius: 10px;
+}
+
+.days ul {
+  padding: 0;
+  list-style: none;
+}
