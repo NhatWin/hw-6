@@ -1,21 +1,37 @@
-// const cityWeather = `api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=1866bb0371e7ecff1990b7e071a75947`
+const cityWeather = {};
 const cityCoordinates = {};
 const search = document.querySelector("#form");
 
 search.addEventListener("submit", function (event) {
   event.preventDefault();
-  cityCoordinates.city = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
-  getCoordinates()
+  cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
+  getWeather()
 });
 
-function getCoordinates() {
-  fetch(cityCoordinates.city)
-    .then(function (weather) {
-      return weather.json();
+function getWeather() {
+  fetch(cityCoordinates.data)
+    .then(function (coords) {
+      return coords.json();
     })
     .then(function (data) {
-      const cityWeather = `api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=1866bb0371e7ecff1990b7e071a75947`
-      console.log(cityWeather)
+      cityWeather.data = `https://api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=1866bb0371e7ecff1990b7e071a75947`
+      fetch(cityWeather.data)
+        .then(function (weather) {
+          return weather.json();
+        })
+        .then(function (data) {
+          console.log(data);
+          // city name
+          console.log(data.city.name);
+          // date
+          console.log(data.list[0].dt_txt);
+          //image
+          console.log(data.list[0].weather[0].id);
+          // temp
+          console.log(data.list[0].main.temp);
+          // wind
+          console.log(data.list[0].wind.speed);
+        })
     })
 }
 
