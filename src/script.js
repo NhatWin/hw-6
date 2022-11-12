@@ -18,6 +18,7 @@ const temp = document.querySelector("#temp");
 const wind = document.querySelector("#wind");
 const hum = document.querySelector("#hum");
 
+// get lon and and lat
 search.addEventListener("submit", function (event) {
   event.preventDefault();
   cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
@@ -29,11 +30,13 @@ search.addEventListener("submit", function (event) {
   ul.append(li);
 });
 
+// display weather
 function openWeather() {
   displayStart.style.setProperty("display","none")
   displayWeather.style.setProperty("display", "block");
 }
 
+// click search history
 document.addEventListener("click", function (event) {
   if(event.target && event.target.id== "history") {
     cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.textContent}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
@@ -41,6 +44,7 @@ document.addEventListener("click", function (event) {
   }
 });
 
+// get city weather
 function getWeather() {
   fetch(cityCoordinates.data)
     .then(function (coords) {
