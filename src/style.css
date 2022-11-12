@@ -87,3 +87,13 @@ h2 {
 img {
   width: 60px;
 }
+
+#start-screen {
+  margin: 10px;
+  font-size: 60px;
+  font-family: 'Chivo', sans-serif;
+}
+
+#weather-info {
+  display: none;
+}

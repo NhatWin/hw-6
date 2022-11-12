@@ -5,6 +5,8 @@ const ul = document.querySelector("#search-history");
 const todayCity = document.querySelector("#today-city");
 const todayWeatherData = document.querySelector("#today-weather-info");
 const history = document.querySelector("#history");
+const displayWeather = document.querySelector("#weather-info");
+const displayStart = document.querySelector("#start-info");
 
 const day1 = document.querySelector("#day1");
 const day2 = document.querySelector("#day2");
@@ -20,11 +22,17 @@ search.addEventListener("submit", function (event) {
   event.preventDefault();
   cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
   getWeather();
+  openWeather();
   const li = document.createElement("li");
   li.setAttribute("id", "history")
   li.textContent = event.target.city.value
   ul.append(li);
 });
+
+function openWeather() {
+  displayStart.style.setProperty("display","none")
+  displayWeather.style.setProperty("display", "block");
+}
 
 document.addEventListener("click", function (event) {
   if(event.target && event.target.id== "history") {
@@ -73,5 +81,3 @@ function getWeather() {
     })
 }
 // TODO: display weather information for upcoming 5 days below main
-
-//TODO: make search history clickable
