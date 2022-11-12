@@ -4,6 +4,13 @@ const search = document.querySelector("#form");
 const ul = document.querySelector("#search-history");
 const todayCity = document.querySelector("#today-city");
 const todayWeatherData = document.querySelector("#today-weather-info");
+const history = document.querySelector("#history");
+
+const day1 = document.querySelector("#day1");
+const day2 = document.querySelector("#day2");
+const day3 = document.querySelector("#day3");
+const day4 = document.querySelector("#day4");
+const day5 = document.querySelector("#day5");
 
 const temp = document.querySelector("#temp");
 const wind = document.querySelector("#wind");
@@ -14,8 +21,16 @@ search.addEventListener("submit", function (event) {
   cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
   getWeather();
   const li = document.createElement("li");
+  li.setAttribute("id", "history")
   li.textContent = event.target.city.value
   ul.append(li);
+});
+
+document.addEventListener("click", function (event) {
+  if(event.target && event.target.id== "history") {
+    cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.textContent}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
+    getWeather();
+  }
 });
 
 function getWeather() {
@@ -47,6 +62,13 @@ function getWeather() {
           wind.textContent = `Wind: ${data.list[0].wind.speed}m/s`;
           // humidity
           hum.textContent = `Humidity: ${data.list[0].main.humidity}%`;
+
+
+
+          // 5days
+          for (let i = 1; i < 5; i++) {
+
+          }
         })
     })
 }
