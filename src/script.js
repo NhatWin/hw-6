@@ -2,6 +2,12 @@ const cityWeather = {};
 const cityCoordinates = {};
 const search = document.querySelector("#form");
 const ul = document.querySelector("#search-history");
+const todayCity = document.querySelector("#today-city");
+const todayWeatherData = document.querySelector("#today-weather-info");
+
+const temp = document.querySelector("#temp");
+const wind = document.querySelector("#wind");
+const hum = document.querySelector("#hum");
 
 search.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -24,28 +30,26 @@ function getWeather() {
           return weather.json();
         })
         .then(function (data) {
-          console.log(data);
-          // city name
-          console.log(data.city.name);
-          // date
-          console.log(data.list[0].dt_txt);
+          // city name and date
+          let rawData = data.list[0].dt_txt
+          const arrayData = rawData.split("-");
+          const dateFix = arrayData[2].split(" ");
+          const completeDate = `${arrayData[1]}/${dateFix[0]}/${arrayData[0]}`
+          todayCity.textContent = `${data.city.name} ${completeDate}`;
           //image
-          console.log(data.list[0].weather[0].icon);
+          const img = document.createElement("img");
+          img.src = `http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
+          todayCity.append(img);
           // temp
-          console.log(data.list[0].main.temp);
+          const celsius = Math.round(data.list[0].main.temp - 273.15);
+          temp.textContent = `Temp: ${celsius}℃`;
           // wind
-          console.log(data.list[0].wind.speed);
+          wind.textContent = `Wind: ${data.list[0].wind.speed}m/s`;
+          // humidity
+          hum.textContent = `Humidity: ${data.list[0].main.humidity}%`;
         })
     })
 }
-
-function addHistory() {
-  const li = document.createElement("li");
-  li.textContent = event.target.city.value
-}
-
-// TODO: display weather information on main screen
-
 // TODO: display weather information for upcoming 5 days below main
 
-//TODO: display previous searches below search bar
+//TODO: make search history clickable
