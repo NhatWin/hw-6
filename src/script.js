@@ -24,10 +24,6 @@ search.addEventListener("submit", function (event) {
   cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
   getWeather();
   openWeather();
-  const li = document.createElement("li");
-  li.setAttribute("id", "history")
-  li.textContent = event.target.city.value
-  ul.append(li);
 });
 
 // display weather
@@ -57,31 +53,45 @@ function getWeather() {
           return weather.json();
         })
         .then(function (data) {
-          // city name and date
-          let rawData = data.list[0].dt_txt
-          const arrayData = rawData.split("-");
-          const dateFix = arrayData[2].split(" ");
-          const completeDate = `${arrayData[1]}/${dateFix[0]}/${arrayData[0]}`
-          todayCity.textContent = `${data.city.name} ${completeDate}`;
-          //image
-          const img = document.createElement("img");
-          img.src = `http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
-          todayCity.append(img);
-          // temp
-          const celsius = Math.round(data.list[0].main.temp - 273.15);
-          temp.textContent = `Temp: ${celsius}℃`;
-          // wind
-          wind.textContent = `Wind: ${data.list[0].wind.speed}m/s`;
-          // humidity
-          hum.textContent = `Humidity: ${data.list[0].main.humidity}%`;
-
-
-
-          // 5days
-          for (let i = 1; i < 5; i++) {
-
-          }
+          localStorage.setItem("weather", JSON.stringify(data));
+          displayInfo ();
         })
     })
 }
+
+function displayInfo () {
+  const data = JSON.parse(localStorage.getItem("weather"))
+
+  // history
+  const li = document.createElement("li");
+  li.setAttribute("id", "history")
+  li.textContent = data.city.name
+  ul.append(li);
+
+  // city name and date
+  let rawData = data.list[0].dt_txt
+  const arrayData = rawData.split("-");
+  const dateFix = arrayData[2].split(" ");
+  const completeDate = `${arrayData[1]}/${dateFix[0]}/${arrayData[0]}`
+  todayCity.textContent = `${data.city.name} ${completeDate}`;
+  //image
+  const img = document.createElement("img");
+  img.src = `http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
+  todayCity.append(img);
+  // temp
+  const celsius = Math.round(data.list[0].main.temp - 273.15);
+  temp.textContent = `Temp: ${celsius}℃`;
+  // wind
+  wind.textContent = `Wind: ${data.list[0].wind.speed}m/s`;
+  // humidity
+  hum.textContent = `Humidity: ${data.list[0].main.humidity}%`;
+
+
+
+  // 5days
+  for (let i = 1; i < 5; i++) {
+
+  }
+}
+
 // TODO: display weather information for upcoming 5 days below main
