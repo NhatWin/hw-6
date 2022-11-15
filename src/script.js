@@ -7,12 +7,7 @@ const todayWeatherData = document.querySelector("#today-weather-info");
 const history = document.querySelector("#history");
 const displayWeather = document.querySelector("#weather-info");
 const displayStart = document.querySelector("#start-info");
-
-const day1 = document.querySelector("#day1");
-const day2 = document.querySelector("#day2");
-const day3 = document.querySelector("#day3");
-const day4 = document.querySelector("#day4");
-const day5 = document.querySelector("#day5");
+const days = document.querySelector("#days");
 
 const temp = document.querySelector("#temp");
 const wind = document.querySelector("#wind");
@@ -32,14 +27,6 @@ function openWeather() {
   displayWeather.style.setProperty("display", "block");
 }
 
-// click search history
-document.addEventListener("click", function (event) {
-  if(event.target && event.target.id== "history") {
-    cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.textContent}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
-    getWeather();
-  }
-});
-
 // get city weather
 function getWeather() {
   fetch(cityCoordinates.data)
@@ -53,6 +40,7 @@ function getWeather() {
           return weather.json();
         })
         .then(function (data) {
+          console.log(data)
           localStorage.setItem("weather", JSON.stringify(data));
           displayInfo ();
         })
@@ -65,15 +53,16 @@ function displayInfo () {
   // history
   const li = document.createElement("li");
   li.setAttribute("id", "history")
-  li.textContent = data.city.name
-  ul.append(li);
+  for (let i = 0; i > ul.children.length; i++) {
+    if (li.textContent != data.city.name) {
+      li.textContent = data.city.name
+      ul.append(li);
+    }
+  }
+
 
   // city name and date
-  let rawData = data.list[0].dt_txt
-  const arrayData = rawData.split("-");
-  const dateFix = arrayData[2].split(" ");
-  const completeDate = `${arrayData[1]}/${dateFix[0]}/${arrayData[0]}`
-  todayCity.textContent = `${data.city.name} ${completeDate}`;
+  todayCity.textContent = `${data.city.name} ${dayjs.unix(data.list[0].dt).format('DD/MM/YYYY')}`;
   //image
   const img = document.createElement("img");
   img.src = `http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
@@ -89,9 +78,38 @@ function displayInfo () {
 
 
   // 5days
-  for (let i = 1; i < 5; i++) {
+  days.innerHTML = "";
+  for (let i = 1; i <= 5; i++) {
+    const section = document.createElement("section");
+    const h3 = document.createElement("h3");
+    const ul = document.createElement("ul");
+    const img = document.createElement("img");
+    const temp = document.createElement("li");
+    const wind = document.createElement("li");
+    const hum = document.createElement("li");
+    const hr = document.createElement("hr");
+    let index = i*8-1;
+
+    section.classList.add("days");
+    h3.textContent = dayjs.unix(data.list[index].dt).format('DD/MM/YYYY');
+    img.src = `http://openweathermap.org/img/wn/${data.list[index].weather[0].icon}@2x.png`
+    h3.append(img);
+    temp.textContent = `Temp: ${Math.round(data.list[index].main.temp - 273.15)}`
+    wind.textContent = `Wind: ${data.list[index].wind.speed}`
+    hum.textContent = `Humidity: ${data.list[index].main.humidity}%`
+    ul.append(temp, wind, hum)
+    section.append(h3, hr, ul);
+    days.append(section);
 
   }
 }
+
+// click search history
+document.addEventListener("click", function (event) {
+  if(event.target && event.target.id == "history") {
+    cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.textContent}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
+    getWeather();
+  }
+});
 
 // TODO: display weather information for upcoming 5 days below main
