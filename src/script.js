@@ -16,7 +16,7 @@ const hum = document.querySelector("#hum");
 // get lon and and lat
 search.addEventListener("submit", function (event) {
   event.preventDefault();
-  cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
+  cityCoordinates.data = `https://api.openweathermap.org/geo/1.0/direct?q=${event.target.city.value}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
   getWeather();
   openWeather();
 });
@@ -64,7 +64,7 @@ function displayInfo () {
   todayCity.textContent = `${data.city.name} ${dayjs.unix(data.list[0].dt).format('DD/MM/YYYY')}`;
   //image
   const img = document.createElement("img");
-  img.src = `http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
+  img.src = `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
   todayCity.append(img);
   // temp
   const celsius = Math.round(data.list[0].main.temp - 273.15);
