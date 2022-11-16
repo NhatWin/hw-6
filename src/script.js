@@ -40,31 +40,25 @@ function getWeather() {
           return weather.json();
         })
         .then(function (data) {
+          let historyArray = JSON.parse(localStorage.getItem("historyData"));
           localStorage.setItem("weather", JSON.stringify(data));
           if(localStorage.getItem("historyData") === null){
             localStorage.setItem("historyData", JSON.stringify([data.city.name]))
+            displayCityHistory ()
+            } else if (historyArray.find((city) => city === data.city.name)) {
+              displayCityHistory ()
             } else {
-              let historyArray = JSON.parse(localStorage.getItem("historyData"));
               NewHistory = historyArray.concat([data.city.name]);
               localStorage.setItem("historyData", JSON.stringify(NewHistory));
+              displayCityHistory ()
             }
-          displayInfo ();
+            displayInfo ();
         })
     })
 }
 
 function displayInfo () {
   const data = JSON.parse(localStorage.getItem("weather"))
-
-  // history
-  const li = document.createElement("li");
-  const historyData = JSON.parse(localStorage.getItem("historyData"));
-  console.log(historyData.length);
-  for ( let i = 0; i < historyData.length; i++) {
-    li.textContent = historyData[i];
-    li.setAttribute("id", "history");
-    ul.append(li);
-  }
 
   // city name and date
   todayCity.textContent = `${data.city.name} ${dayjs.unix(data.list[0].dt).format('DD/MM/YYYY')}`;
@@ -116,4 +110,13 @@ document.addEventListener("click", function (event) {
   }
 });
 
-// TODO: display weather information for upcoming 5 days below main
+function displayCityHistory () {
+  const historyData = JSON.parse(localStorage.getItem("historyData"));
+  ul.innerHTML = "";
+  for ( let i = 0; i < historyData.length; i++) {
+    const li = document.createElement("li");
+    li.textContent = historyData[i];
+    li.setAttribute("id", "history");
+    ul.append(li);
+  }
+}
