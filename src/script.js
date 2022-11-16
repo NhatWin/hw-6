@@ -40,8 +40,14 @@ function getWeather() {
           return weather.json();
         })
         .then(function (data) {
-          console.log(data)
           localStorage.setItem("weather", JSON.stringify(data));
+          if(localStorage.getItem("historyData") === null){
+            localStorage.setItem("historyData", JSON.stringify([data.city.name]))
+            } else {
+              let historyArray = JSON.parse(localStorage.getItem("historyData"));
+              NewHistory = historyArray.concat([data.city.name]);
+              localStorage.setItem("historyData", JSON.stringify(NewHistory));
+            }
           displayInfo ();
         })
     })
@@ -52,14 +58,13 @@ function displayInfo () {
 
   // history
   const li = document.createElement("li");
-  li.setAttribute("id", "history")
-  for (let i = 0; i > ul.children.length; i++) {
-    if (li.textContent != data.city.name) {
-      li.textContent = data.city.name
-      ul.append(li);
-    }
+  const historyData = JSON.parse(localStorage.getItem("historyData"));
+  console.log(historyData.length);
+  for ( let i = 0; i < historyData.length; i++) {
+    li.textContent = historyData[i];
+    li.setAttribute("id", "history");
+    ul.append(li);
   }
-
 
   // city name and date
   todayCity.textContent = `${data.city.name} ${dayjs.unix(data.list[0].dt).format('DD/MM/YYYY')}`;
@@ -74,7 +79,6 @@ function displayInfo () {
   wind.textContent = `Wind: ${data.list[0].wind.speed}m/s`;
   // humidity
   hum.textContent = `Humidity: ${data.list[0].main.humidity}%`;
-
 
 
   // 5days
