@@ -105,7 +105,7 @@ function displayInfo () {
 // click search history
 document.addEventListener("click", function (event) {
   if(event.target && event.target.id == "history") {
-    cityCoordinates.data = `http://api.openweathermap.org/geo/1.0/direct?q=${event.target.textContent}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
+    cityCoordinates.data = `https://api.openweathermap.org/geo/1.0/direct?q=${event.target.textContent}&limit=1&appid=1866bb0371e7ecff1990b7e071a75947`
     getWeather();
   }
 });
